@@ -1,0 +1,51 @@
+{
+    "seankdecker": {
+        "title": "my website",
+        "description": "old school html website",
+        "url": "seankdecker.com",
+        "username": null,
+        "password": null
+    },
+    "seanktakahashi": {
+        "title": "my new website",
+        "description": "new school react website",
+        "url": "seanktakahashi.com",
+        "username": null,
+        "password": null
+    },
+    "seanilu": {
+        "title": "seanilu",
+        "description": "website to repalce the square space photo albums",
+        "url": "seanilu.com",
+        "username": "seanilu",
+        "password": "Sean<3Marilu!"
+    },
+    "egghunt 2021": {
+        "title": "egghunt 2021 website",
+        "description": "because of the pandemic, egghunt needed to be virtual",
+        "url": "egghunt.seanilu.com",
+        "username": "easter",
+        "password": "bunny!"
+    },
+    "proposal": {
+        "title": "seanilu proposal",
+        "description": "for purposes of planning and executing the proposal",
+        "url": "proposal.seanilu.com",
+        "username": "proposal",
+        "password": "mlu"
+    },
+    "anniversary": {
+        "title": "seanilu anniversary",
+        "description": "for purposes of planning and executing the proposal",
+        "url": "proposal.seanilu.com",
+        "username": "proposal",
+        "password": "mlu"
+    },
+    "たかはし": {
+        "title": "family website",
+        "description": "website for geneology",
+        "url": "たかはし.com",
+        "username": null,
+        "password": null
+    }
+}

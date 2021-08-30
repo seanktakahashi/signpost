@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>sean's signpost</title>
+  <meta name='author' content='sean' />
+  <script id='utils' type='text/javascript'>
+    /*
+    * load json file into js object
+     */
+    function loadJSON(jsonFile, callback) {
+      var xobj = new XMLHttpRequest();
+      xobj.overrideMimeType('application/json');
+      xobj.open('GET', jsonFile, true);
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          try {
+            const res = JSON.parse(xobj.responseText);
+            callback(res);
+          } catch (err) {
+            throw (`ERROR: while parsing json of ${jsonFile} got error ${err}`);
+          }
+        }
+      };
+      xobj.send();
+    }
+
+    /*
+    backup copyText function that relies on document.execCommand()
+    which needs some text area on the page to copy from
+    */
+    function fallbackCopyTextToClipboard(text) {
+      let textArea = document.createElement("textarea");
+      textArea.value = text;
+
+      // Avoid scrolling to bottom or right
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        const successful = document.execCommand('copy');
+        const msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Fallback: Copying text command was ' + msg);
+      } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+      }
+      document.body.removeChild(textArea);
+    }
+
+    /*
+    primary copyText function which relies on navigator.clipboard
+    */
+    function copyTextToClipboard(text) {
+      if (!navigator.clipboard) {
+        fallbackCopyTextToClipboard(text);
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        console.log('Async: Copying to clipboard was successful!');
+      }, (err) => {
+        console.error('Async: Could not copy text: ', err);
+      });
+    }
+
+  </script>
+  <style id='background-image'>
+    * {
+      margin: 0;
+    }
+
+    #card-collection {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+
+    .web-card-wrapper {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .web-card {
+      width: 200px;
+      padding: 10px;
+      position: relative;
+    }
+
+    .web-card .tooltip {
+      opacity: 0;
+      width: 120px;
+      top: 0;
+      left: 104%;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+
+      /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+    }
+
+    .web-card:hover {
+      transition: background-color ease-in 0.6s, color ease-in 0.6s;
+      color: white;
+      background-color: black;
+    }
+
+    .web-card:hover .tooltip {
+      opacity: 1;
+      transition: opacity ease-in 0.8s;
+    }
+
+    .web-card .tooltip::after {
+      content: " ";
+      position: absolute;
+      top: 20%;
+      right: 100%;
+      /* To the left of the tooltip */
+      margin-top: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent black transparent transparent;
+    }
+
+    h2 {
+      padding: 0.4em;
+      text-align: center;
+    }
+
+    .clipboard-button {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id='card-collection'></div>
+  <script>
+    const clipboardImgPath = 'clipboard-outline.svg';
+
+    function changeBackground(img) {
+      var styleElem = document.getElementById('background-image');
+      styleElem.innerHTML = `#landing-container::after { background-image: url('${img}'); }`;
+    }
+
+    const publicFields = ['name', 'description', 'url'];
+    const privateFields = ['username', 'password'];
+
+    class Website {
+      constructor(websiteObj) {
+        if (websiteObj.password != null) {
+          this.private = {};
+          // this is a private signpost
+          privateFields.forEach((field) => {
+            this.private[field] = websiteObj[field];
+          });
+        }
+        this.public = {};
+        publicFields.forEach((field) => {
+          this.public[field] = websiteObj[field];
+        });
+      }
+
+      buildLinkWrapper() {
+        let webCardWrapper = document.createElement('a');
+        webCardWrapper.setAttribute('href', this.public.url);
+        webCardWrapper.setAttribute('class', 'web-card-wrapper');
+        return webCardWrapper;
+      }
+
+      buildHeader() {
+        const headerWrapper = this.buildLinkWrapper();
+        let header = document.createElement('h2');
+        header.appendChild(document.createTextNode(this.public.name));
+        headerWrapper.appendChild(header);
+        return headerWrapper;
+      }
+
+      buildCode(text) {
+        let container = document.createElement('div');
+        let code = document.createElement('code');
+        code.appendChild(document.createTextNode(text));
+        let button = document.createElement('button');
+        button.setAttribute('onclick', `copyTextToClipboard(\"${text}\")`);
+        button.setAttribute('class', 'clipboard-button');
+        const clipboardImg = document.createElement('img');
+        clipboardImg.setAttribute('src', clipboardImgPath);
+        clipboardImg.setAttribute('width', '13');
+        clipboardImg.setAttribute('height', '13');
+        button.appendChild(clipboardImg);
+        container.appendChild(button);
+        container.appendChild(code);
+        return container;
+      }
+
+      buildTooltip() {
+        let tooltip = document.createElement('span');
+        tooltip.appendChild(document.createTextNode(this.public.description));
+        tooltip.setAttribute('class', 'tooltip');
+        return tooltip;
+      }
+
+      buildCard() {
+        let webCard = document.createElement('div');
+        webCard.setAttribute('class', 'web-card');
+        webCard.appendChild(this.buildHeader());
+        if (this.private != null) {
+          webCard.appendChild(this.buildCode(this.private.username));
+          webCard.appendChild(this.buildCode(this.private.password));
+        }
+        const tooltip = this.buildTooltip();
+        webCard.appendChild(tooltip);
+        return webCard;
+      }
+    }
+
+    loadJSON('signpost.json', (signpost) => {
+      let cardCollection = document.getElementById('card-collection');
+      signpost.forEach(websiteObj => {
+        const website = new Website(websiteObj);
+        cardCollection.appendChild(website.buildCard());
+      });
+    });
+
+  </script>
+</body>
+
+</html>
