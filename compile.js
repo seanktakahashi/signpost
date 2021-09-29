@@ -6,8 +6,8 @@ const Path = require('path');
 const Yargs = require('yargs');
 
 const signpostFile = "signpost.json";
-const privateSignpostFile = Path.join("private-signpost", signpostFile);
-const publicSignpostFile = Path.join("public-signpost", signpostFile);
+const publicSignpostFile = Path.join("signpost", signpostFile);
+const privateSignpostFile = Path.join("signpost/private", signpostFile);
 
 class PublicWebsite {
   constructor(rawWebsite) {
