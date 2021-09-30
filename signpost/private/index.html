@@ -4,16 +4,22 @@
 <head>
   <title>signpost</title>
   <meta name='author' content='sean' />
-  <script id="util" type="text/javascript" src="/util.js"></script>
-  <script id="Website" type="text/javascript" src="/Website.js"></script>
-  <link id="style" rel="stylesheet" type="text/css" href="/style.css">
+  <script id='util' type='text/javascript' src='/js/util.js'></script>
+  <script id='util' type='text/javascript' src='/js/crypto-js.min.js'></script>
+  <script id='Website' type='text/javascript' src='/js/Website.js'></script>
+  <script id='Website' type='text/javascript' src='/js/Decryptor.js'></script>
+  <link id='style' rel='stylesheet' type='text/css' href='/style.css'>
 </head>
 
 <body>
   <div id='card-collection'></div>
   <script>
-    loadJSON('signpost.json', (signpost) => {
-      let cardCollection = document.getElementById('card-collection');
+    const cardCollection = document.getElementById('card-collection');
+
+    loadTextFile('signpost.json.enc', (encryptedSignpost) => {
+      const password = window.prompt('enter password');
+      const rawSignpost = Decryptor.decrypt(encryptedSignpost, password);
+      const signpost = JSON.parse(rawSignpost);
       signpost.forEach(websiteObj => {
         const website = new Website(websiteObj);
         cardCollection.appendChild(website.buildCard());

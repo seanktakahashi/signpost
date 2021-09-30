@@ -1,5 +1,18 @@
+/**
+ * 
+ */
+function executeIfFileExist(src, callback) {
+  var xhr = new XMLHttpRequest()
+  xhr.onreadystatechange = function () {
+    if (this.readyState === this.DONE) {
+      callback()
+    }
+  }
+  xhr.open('HEAD', src)
+}
+
 /*
-* load json file into js object
+ * load json file into js object
  */
 function loadJSON(jsonFile, callback) {
   var xobj = new XMLHttpRequest();
@@ -10,18 +23,29 @@ function loadJSON(jsonFile, callback) {
       try {
         const res = JSON.parse(xobj.responseText);
         callback(res);
-      } catch (err) {
-        throw (`ERROR: while parsing json of ${jsonFile} got error ${err}`);
+      } catch (e) {
+        console.error(`ERROR: while parsing json of ${jsonFile} got error`, e);
       }
     }
   };
   xobj.send();
 }
 
+function loadTextFile(file, callback) {
+  var xobj = new XMLHttpRequest();
+  xobj.open('GET', file, true);
+  xobj.onreadystatechange = function () {
+    if (xobj.readyState === this.DONE) {
+      callback(xobj.responseText);
+    }
+  };
+  xobj.send();
+}
+
 /*
-backup copyText function that relies on document.execCommand()
-which needs some text area on the page to copy from
-*/
+ * backup copyText function that relies on document.execCommand()
+ * which needs some text area on the page to copy from
+ */
 function fallbackCopyTextToClipboard(text) {
   let textArea = document.createElement("textarea");
   textArea.value = text;
@@ -45,8 +69,8 @@ function fallbackCopyTextToClipboard(text) {
 }
 
 /*
-primary copyText function which relies on navigator.clipboard
-*/
+ * primary copyText function which relies on navigator.clipboard
+ */
 function copyTextToClipboard(text) {
   if (!navigator.clipboard) {
     fallbackCopyTextToClipboard(text);
