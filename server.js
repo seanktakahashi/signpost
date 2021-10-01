@@ -1,6 +1,6 @@
 let express = require('express');
 
-const signpost = 'signpost';
+const signpost = 'docs';
 const app1 = express();
 app1.use(express.static(signpost));
 // public signpost
