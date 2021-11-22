@@ -8,5 +8,15 @@
     "name": "seanktakahashi",
     "description": "my new school react website",
     "url": "http://seanktakahashi.com"
+  },
+  {
+    "name": "signpost",
+    "description": "for finding my way",
+    "url": "https://signpost.seanktakahashi.com"
+  },
+  {
+    "name": "blue website",
+    "description": "website under the couch",
+    "url": "https://73.170.105.86"
   }
 ]

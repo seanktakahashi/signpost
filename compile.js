@@ -154,6 +154,6 @@ Yargs
     `and save the private signpost instead to ${encryptedPrivateSignpostFile}`,
     {},
     ({ password }) => main(password))
-  .usage('Usage: node index.js')
+  .usage('Usage: node compile.js <password>')
   .help()
   .argv;
