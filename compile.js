@@ -11,29 +11,14 @@ const publicSignpostFile = Path.join("docs", signpostFile);
 const privateSignpostFile = Path.join("docs/private", signpostFile);
 const encryptedPrivateSignpostFile = Path.join("docs/private", signpostFile + '.enc');
 
-class PublicWebsite {
+class Website {
   constructor(rawWebsite) {
     this.name = rawWebsite.name;
     this.description = rawWebsite.description;
     this.url = rawWebsite.url;
-    this.hidden = rawWebsite.hidden == null ? false : rawWebsite.hidden === 'true';
-  }
-
-  toJSON() {
-    return {
-      name: this.name,
-      description: this.description,
-      url: this.url,
-    }
-  }
-}
-
-class PrivateWebsite extends PublicWebsite {
-  constructor(rawWebsite) {
-    super(rawWebsite);
     this.username = rawWebsite.username;
     this.password = rawWebsite.password;
-    this.hidden = rawWebsite.hidden == null ? false : rawWebsite.hidden === 'true';
+    this.private = rawWebsite.private == null ? false : rawWebsite.private === 'true';
   }
 
   toJSON() {
@@ -42,7 +27,7 @@ class PrivateWebsite extends PublicWebsite {
       description: this.description,
       url: this.url,
       username: this.username,
-      password: this.password
+      password: this.password,
     }
   }
 }
@@ -116,16 +101,10 @@ function printSuccess(outputFile, signpost) {
   });
 }
 
-function hydrateWebsites(rawSignpost, isPrivate) {
-  return rawSignpost.map(
-    (rawWebsite) => isPrivate ? new PrivateWebsite(rawWebsite) : new PublicWebsite(rawWebsite)
-  );
-}
-
 function createSignpostForFields(inputFile, outputFile, isPrivate, password = undefined) {
   const rawSignpost = loadJson(inputFile);
-  const fullSignpost = hydrateWebsites(rawSignpost, isPrivate);
-  const signpost = fullSignpost.filter(post => !post.hidden || isPrivate);
+  const fullSignpost = rawSignpost.map((rawWebsite) => new Website(rawWebsite));
+  const signpost = fullSignpost.filter(post => post.private == isPrivate);
   if (password == null) {
     writeJsonToFile(outputFile, signpost);
   } else {
