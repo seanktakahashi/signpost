@@ -20,12 +20,13 @@ function loadJSON(jsonFile, callback) {
   xobj.open('GET', jsonFile, true);
   xobj.onreadystatechange = function () {
     if (xobj.readyState == 4 && xobj.status == '200') {
+      let res;
       try {
-        const res = JSON.parse(xobj.responseText);
-        callback(res);
+        res = JSON.parse(xobj.responseText);
       } catch (e) {
         console.error(`ERROR: while parsing json of ${jsonFile} got error`, e);
       }
+      callback(res);
     }
   };
   xobj.send();

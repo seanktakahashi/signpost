@@ -3,6 +3,28 @@ const clipboardImgPath = '/clipboard-outline.svg';
 const publicFields = ['name', 'description', 'url'];
 const privateFields = ['username', 'password'];
 
+function getIndicatorId(name) {
+  return name.replace(' ', '_') + '_indicator'
+}
+
+function setStatus(url, success) {
+  if (success) {
+    let indicator = document.getElementById(getIndicatorId(url));
+    console.log(getIndicatorId(url), indicator);
+    indicator.setAttribute('class', 'indicator success');
+  }
+}
+
+function fetchStatus(url, name) {
+  let fetchStatusHack = document.createElement('img');
+  fetchStatusHack.setAttribute('style', 'visibility:hidden');
+  fetchStatusHack.setAttribute('src', url + '/favicon.svg');
+  fetchStatusHack.onabort = () => setStatus(name, false);
+  fetchStatusHack.onload = () => setStatus(name, true);
+  fetchStatusHack.onerror = () => setStatus(name, false);
+  document.body.appendChild(fetchStatusHack);
+}
+
 class Website {
   constructor(websiteObj) {
     if (websiteObj.password != null) {
@@ -25,10 +47,20 @@ class Website {
     return webCardWrapper;
   }
 
+  buildStatusIndicator() {
+    let statusIndicator = document.createElement('div');
+    statusIndicator.setAttribute('class', 'indicator loading');
+    statusIndicator.setAttribute('id', getIndicatorId(this.public.name));
+    fetchStatus(this.public.url, this.public.name);
+    return statusIndicator;
+  }
+
   buildHeader() {
     const headerWrapper = this.buildLinkWrapper();
     let header = document.createElement('h2');
+    header.setAttribute('class', 'header');
     header.appendChild(document.createTextNode(this.public.name));
+    header.appendChild(this.buildStatusIndicator());
     headerWrapper.appendChild(header);
     return headerWrapper;
   }

@@ -59,11 +59,32 @@
   border-color: transparent black transparent transparent;
 }
 
-h2 {
+.header {
   padding: 0.4em;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .clipboard-button {
   margin-right: 5px;
+}
+
+.indicator {
+  height: 13px;
+  width: 13px;
+  margin-left: 10px;
+  border-radius: 100%;
+}
+
+.loading {
+  background-color: gold;
+}
+
+.error {
+  background-color: orangered;
+}
+
+.success {
+  background-color: chartreuse;
 }
