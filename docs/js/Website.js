@@ -1,7 +1,6 @@
 const clipboardImgPath = '/clipboard-outline.svg';
 
-const publicFields = ['name', 'description', 'url'];
-const privateFields = ['username', 'password'];
+const fields = ['name', 'description', 'type', 'url', 'username', 'password'];
 
 function getIndicatorId(name) {
   return name.replace(' ', '_') + '_indicator'
@@ -27,22 +26,14 @@ function fetchStatus(url, name) {
 
 class Website {
   constructor(websiteObj) {
-    if (websiteObj.password != null) {
-      this.private = {};
-      // this is a private signpost
-      privateFields.forEach((field) => {
-        this.private[field] = websiteObj[field];
-      });
-    }
-    this.public = {};
-    publicFields.forEach((field) => {
-      this.public[field] = websiteObj[field];
+    fields.forEach((field) => {
+      this[field] = websiteObj[field];
     });
   }
 
   buildLinkWrapper() {
     let webCardWrapper = document.createElement('a');
-    webCardWrapper.setAttribute('href', this.public.url);
+    webCardWrapper.setAttribute('href', this.url);
     webCardWrapper.setAttribute('class', 'web-card-wrapper');
     return webCardWrapper;
   }
@@ -50,22 +41,25 @@ class Website {
   buildStatusIndicator() {
     let statusIndicator = document.createElement('div');
     statusIndicator.setAttribute('class', 'indicator loading');
-    statusIndicator.setAttribute('id', getIndicatorId(this.public.name));
-    fetchStatus(this.public.url, this.public.name);
+    statusIndicator.setAttribute('id', getIndicatorId(this.name));
+    fetchStatus(this.url, this.name);
     return statusIndicator;
   }
 
-  buildHeader() {
+  insertHeader(webCard) {
     const headerWrapper = this.buildLinkWrapper();
     let header = document.createElement('h2');
     header.setAttribute('class', 'header');
-    header.appendChild(document.createTextNode(this.public.name));
+    header.appendChild(document.createTextNode(this.name));
     header.appendChild(this.buildStatusIndicator());
     headerWrapper.appendChild(header);
-    return headerWrapper;
+    webCard.appendChild(headerWrapper);
   }
 
-  buildCode(text) {
+  insertCode(webCard, text) {
+    if (text == null) {
+      return;
+    }
     let container = document.createElement('div');
     let code = document.createElement('code');
     code.appendChild(document.createTextNode(text));
@@ -79,26 +73,28 @@ class Website {
     button.appendChild(clipboardImg);
     container.appendChild(button);
     container.appendChild(code);
-    return container;
+    webCard.appendChild(container);
   }
 
-  buildTooltip() {
-    let tooltip = document.createElement('span');
-    tooltip.appendChild(document.createTextNode(this.public.description));
+  insertTooltip(webCard) {
+    let tooltip = document.createElement('div');
+    let descriptionContainer = document.createElement('span');
+    descriptionContainer.appendChild(document.createTextNode(this.description));
+    tooltip.appendChild(descriptionContainer);
+    let typeContainer = document.createElement('span');
+    typeContainer.appendChild(document.createTextNode(this.type));
+    tooltip.appendChild(typeContainer);
     tooltip.setAttribute('class', 'tooltip');
-    return tooltip;
+    webCard.appendChild(tooltip)
   }
 
   buildCard() {
     let webCard = document.createElement('div');
     webCard.setAttribute('class', 'web-card');
-    webCard.appendChild(this.buildHeader());
-    if (this.private != null) {
-      webCard.appendChild(this.buildCode(this.private.username));
-      webCard.appendChild(this.buildCode(this.private.password));
-    }
-    const tooltip = this.buildTooltip();
-    webCard.appendChild(tooltip);
+    this.insertHeader(webCard);
+    this.insertCode(webCard, this.username);
+    this.insertCode(webCard, this.password);
+    this.insertTooltip(webCard);
     return webCard;
   }
 }

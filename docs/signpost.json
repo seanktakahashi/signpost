@@ -2,21 +2,25 @@
   {
     "name": "seankdecker",
     "description": "my old school html website",
+    "type": "vanilla html/css/js\n hosted from S3 bucket",
     "url": "http://seankdecker.com"
   },
   {
     "name": "seanktakahashi",
     "description": "my new school react website",
+    "type": "vanilla html/css/js\n hosted from S3 bucket",
     "url": "http://seanktakahashi.com"
   },
   {
     "name": "signpost",
     "description": "for finding my way",
+    "type": "vanilla html/css/js, compiled from json\n hosted from Github pages",
     "url": "https://signpost.seanktakahashi.com"
   },
   {
     "name": "blue website",
     "description": "website under the couch",
+    "type": "vanilla html/css/js\n hosted from linux server with node, pm2, and nginx",
     "url": "https://73.170.105.86"
   }
 ]

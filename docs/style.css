@@ -25,12 +25,14 @@
   width: 120px;
   top: 0;
   left: 104%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   background-color: black;
   color: #fff;
   text-align: center;
   border-radius: 6px;
-  padding: 5px 0;
-
+  padding: 5px;
   /* Position the tooltip */
   position: absolute;
   z-index: 1;
@@ -47,12 +49,13 @@
   transition: opacity ease-in 0.8s;
 }
 
+/* tooltip arrow */
 .web-card .tooltip::after {
   content: " ";
   position: absolute;
   top: 20%;
   right: 100%;
-  /* To the left of the tooltip */
+  /* To the top left of the tooltip */
   margin-top: -5px;
   border-width: 5px;
   border-style: solid;

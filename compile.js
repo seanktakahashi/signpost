@@ -15,6 +15,7 @@ class Website {
   constructor(rawWebsite) {
     this.name = rawWebsite.name;
     this.description = rawWebsite.description;
+    this.type = rawWebsite.type;
     this.url = rawWebsite.url;
     this.username = rawWebsite.username;
     this.password = rawWebsite.password;
@@ -25,6 +26,7 @@ class Website {
     return {
       name: this.name,
       description: this.description,
+      type: this.type,
       url: this.url,
       username: this.username,
       password: this.password,
