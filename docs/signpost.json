@@ -3,18 +3,18 @@
     "name": "seankdecker",
     "description": "my old school html website",
     "type": "vanilla html/css/js\n hosted from S3 bucket",
-    "url": "http://seankdecker.com"
+    "url": "https://seankdecker.com"
   },
   {
     "name": "seanktakahashi",
     "description": "my new school react website",
-    "type": "vanilla html/css/js\n hosted from S3 bucket",
-    "url": "http://seanktakahashi.com"
+    "type": "react redux app written in typescript compiled with babel and packaged with webpack\n hosted from Github pages",
+    "url": "https://seanktakahashi.com"
   },
   {
     "name": "signpost",
     "description": "for finding my way",
-    "type": "vanilla html/css/js, compiled from json\n hosted from Github pages",
+    "type": "vanilla html/css/js, compiled from json with js CLI\n hosted from Github pages",
     "url": "https://signpost.seanktakahashi.com"
   },
   {
