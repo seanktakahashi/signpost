@@ -5,11 +5,16 @@
 	 viewBox="0 0 433.479 433.479" style="enable-background:new 0 0 433.479 433.479;" xml:space="preserve">
 <style>
   path {
-    fill: black;
+    fill: grey;
   }
   @media ( prefers-color-scheme: dark ) {
     path {
       fill: white;
+    }
+  }
+  @media ( prefers-color-scheme: light ) {
+    path {
+      fill: black;
     }
   }
 </style>
